@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jasper Daniel — Original Watercolor & Charcoal Works (A5–A4)</title>
+  <meta name="description" content="Original, small-format watercolors, charcoals, and pencil sketches by a self-taught artist. Each work is unique, intuitive, and made to evoke feeling." />
+  <meta property="og:title" content="Original Watercolor & Charcoal Works (A5–A4)" />
+  <meta property="og:description" content="Self-taught, intuitive artworks — no reproductions, every piece one-of-one." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/images/og-cover.jpg" />
+  <meta name="theme-color" content="#111111" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Spectral:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#ffffff; --fg:#111111; --muted:#6b7280; --line:#e5e7eb; --card:#fafafa; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
+    a{color:inherit;text-decoration:none}
+
+    /* Page wrapper */
+    .container{max-width:1120px;margin:0 auto;padding:24px}
+
+    /* Header */
+    header{display:flex;justify-content:space-between;align-items:center;
+      padding:16px 0;border-bottom:1px solid var(--line);
+      position:sticky;top:0;background:rgba(255,255,255,.85);
+      backdrop-filter:saturate(180%) blur(8px);z-index:10}
+    .brand{display:flex;gap:12px;align-items:center}
+    .dot{width:10px;height:10px;border-radius:50%;background:#111}
+    .nav-links{display:flex;gap:20px;font-size:14px;font-weight:500}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:end;padding:56px 0}
+    .h1{font-family:Spectral,serif;font-size:44px;line-height:1.1;margin:0 0 12px}
+    .lead{font-size:18px;color:var(--muted);max-width:52ch}
+    .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .badge{border:1px solid var(--line);padding:4px 10px;border-radius:999px;font-size:12px;color:#333;background:#fff}
+    .cta{display:flex;gap:12px;margin-top:24px}
+    .btn{appearance:none;border:1px solid #111;background:#111;color:#fff;padding:10px 16px;border-radius:999px;font-weight:600;cursor:pointer}
+    .btn.outline{background:transparent;color:#111}
+    .panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+    .notes{font-size:14px;color:var(--muted)}
+
+    /* Sections */
+    .section{padding:32px 0}
+    .section h2{font-family:Spectral,serif;font-size:28px;margin:0 0 12px}
+
+    /* Gallery */
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .art{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;cursor:zoom-in}
+    .art img{max-width:70%;max-height:70%;object-fit:contain;transition:transform .25s ease}
+    .art .cap{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;font-size:12px;color:#444;
+      background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.95));}
+    .grid-note{margin-top:8px;color:var(--muted);font-size:12px}
+
+    /* Cards (Acquire/Contact) */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    .card{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}
+    .card h3{margin:.2rem 0 .4rem;font-size:16px}
+    .small{font-size:13px;color:var(--muted)}
+
+    footer{border-top:1px solid var(--line);padding:24px 0;color:#555;font-size:14px}
+
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999}
+    .lightbox.open{display:flex}
+    .lightbox figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px}
+    .lightbox img{max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain}
+    .lightbox .caption{color:#e5e7eb;font-size:14px;text-align:center;max-width:80ch}
+    .lightbox .close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;padding:8px 12px;border-radius:999px;font-size:14px;cursor:pointer}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .gallery{grid-template-columns:repeat(2,1fr)}
+      .cards{grid-template-columns:1fr 1fr}
+      .nav-links{display:none}
+    }
+    @media (max-width:560px){
+      .gallery{grid-template-columns:1fr}
+      .cards{grid-template-columns:1fr}
+    }
+/* Lightbox navigation arrows */
+.lightbox .nav {
+  position:fixed;
+  top:50%;
+  transform:translateY(-50%);
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.3);
+  color:#fff;
+  font-size:32px;
+  line-height:1;
+  padding:10px 16px;
+  border-radius:50%;
+  cursor:pointer;
+  z-index:10000;
+}
+.lightbox .nav:hover { background:rgba(255,255,255,0.3); }
+.lightbox .prev { left:20px; }
+.lightbox .next { right:20px; }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="dot" aria-hidden="true"></div>
+        <strong>Jasper Daniel</strong>
+      </div>
+      <nav class="nav-links">
+        <a href="#works">Gallery</a>
+        <a href="#about">About</a>
+        <a href="#buy">Acquire</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div>
+        <h1 class="h1">Original small-format works in watercolor, charcoal, & pencil.</h1>
+        <p class="lead">Every work is one-of-a-kind, shaped by imagination and intuition, aiming for emotional resonance.</p>
+        <div class="badges">
+          <span class="badge">Self-taught</span>
+          <span class="badge">No reproductions</span>
+          <span class="badge">Affordable originals</span>
+          <span class="badge">Ships worldwide</span>
+        </div>
+        <div class="cta">
+          <a class="btn" href="#works">Browse Works</a>
+          <a class="btn outline" href="#contact">Enquire</a>
+        </div>
+      </div>
+      <div class="panel">
+        <p class="notes"><strong>Recurring themes</strong>: Living quarters (apartments, shanty tenements), faces, landscapes, quirky and humourous sketches, and human forms in varied poses. <br><br><strong>Notes on process</strong>: Each piece is composed in the moment; no two are alike and none are reproduced.</p>
+      </div>
+    </section>
+
+    <section id="works" class="section">
+      <h2>Gallery</h2>
+      <div class="gallery" aria-live="polite">
+        <figure class="art" data-theme="living">
+          <img src="images/Tenements-1.jpg" alt="Charcoal study of stacked tenements on a hill side" loading="lazy" />
+          <figcaption class="cap">Tenements-1 · Charcoal · 8x8 inches· Original</figcaption>
+        </figure>
+        <figure class="art" data-theme="Drawings">
+          <img src="images/Untangled(Nirvana).jpg" alt="Intuitive pencil drawing of my version of Nirvana" loading="lazy" />
+          <figcaption class="cap">Untangled (Nirvana)· Pencil· 8x8 inches · Original</figcaption>
+        </figure>
+        <figure class="art" data-theme="Dream">
+          <img src="images/Dream-1.png" alt="Intuitive Charcoal rendition of a dreeam" loading="lazy" />
+          <figcaption class="cap">Dream-1 · Charcoal· A5 · Original</figcaption>
+        </figure>
+        <figure class="art" data-theme="quirky">
+          <img src="images/Conversation.jpg" alt="Digital drawing of two friends" loading="lazy" />
+          <figcaption class="cap">Conversation· Digital· A5 · Original</figcaption>
+        </figure>
+
+        <!-- placeholders for artworks 5–20 -->
+        <figure class="art" data-theme="Landscape"><img src="images/Village 1.png" alt="Oil Pastels sketch of a village" loading="lazy" /><figcaption class="cap">Village 1 · Oil Pastels· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Dream"><img src="images/Arrival.jpg" alt="Watercolor rendition of an arrival" loading="lazy" /><figcaption class="cap">Arrival · Watercolor· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Digital"><img src="images/Village Girl.png" alt="Intuitive digital sketch of a village girl" loading="lazy" /><figcaption class="cap">Village Girl · Digital · A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Humour"><img src="images/Childhood Terror.jpg" alt="Intuitive Digital Drawing of childhood terror" loading="lazy" /><figcaption class="cap">Childhood Terror· Digital· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Dream"><img src="images/Transit.jpg" alt="Intuitive charcoal rendition of a dream" loading="lazy" /><figcaption class="cap">Transit· Charcoal· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Dream"><img src="images/Sunday.jpg" alt="Intuitive watercolor rendition of a street basking on the Sunday joy" loading="lazy" /><figcaption class="cap">Sunday· Watercolor· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Tenements"><img src="images/Street Chaos.jpg" alt="Intuitive abstract watercolor rendering of street" loading="lazy" /><figcaption class="cap">Street Chaos· Watercolor· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Tenements"><img src="images/Two Houses.jpg" alt="Oil Pastels finger paining of a village scene" loading="lazy" /><figcaption class="cap">Two Houses· Oil Pastels· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Dream"><img src="images/Face 5.jpg" alt="Intuitive charcoal rendition of a dream" loading="lazy" /><figcaption class="cap">Face 5· Charcoal· 8x8 inches· Original</figcaption></figure>
+        <figure class="art" data-theme="Dream"><img src="images/Face 4.png" alt="Intuitive rendition of a face in charcoal" loading="lazy" /><figcaption class="cap">Face 4· Charcoal· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Dream"><img src="images/Pub 1.jpg" alt="Intuitive rendition of a pub in charcoal" loading="lazy" /><figcaption class="cap">Pub 1· Charcoal· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Humour"><img src="images/Face 9.jpg" alt="Quick Sketch in oil pastels of a quirky face" loading="lazy" /><figcaption class="cap">Face 9· Oil Pastels· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Humour"><img src="images/Spider.png" alt="Intuitive Pencil Drawing of a moment" loading="lazy" /><figcaption class="cap">Spider· Pencil· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Drawing"><img src="images/Dancer.jpg" alt="Quick digital drawing of a dancer" loading="lazy" /><figcaption class="cap">Dancer· Digital· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Humour"><img src="images/Job's Friends.jpg" alt="Quick digital sketch of Job's Friends" loading="lazy" /><figcaption class="cap">Job's Friends· Digital· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Humour"><img src="images/Aunt.png" alt="Digital rendition of my aunt" loading="lazy" /><figcaption class="cap">Aunt· Digital· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Humour"><img src="images/A Friend.jpg" alt="Water color sketch of a friend" loading="lazy" /><figcaption class="cap">A Friend· Watercolor· A5 · Original</figcaption></figure>
+      </div>
+      <p class="grid-note">Stay in touch to receive notifications when I add new work. To view more, visit my instagram page. The link is in the contact section.</p>
+    </section>
+
+    <!-- Keep nav link working (About) -->
+    <section id="about" class="section">
+      <h2>Artist Statement</h2>
+      <p>Each piece is one-of-a-kind, created purely from imagination and guided by intuition. The artist seeks not perfection but the emotional resonance hidden in strokes, shades, forms, and colors—leaning toward impressionistic expression. These works move between light-hearted humor, the bizarre, the dark, and the dreamy, born out of joy, passion, hope, and at times depression, anxiety, or even delirium. Themes return and evolve: living spaces and city edges; faces and figures; landscapes and odd little mash-ups that make me smile. For the artist, the blank canvas is both terrifying and exhilarating, a place to lose oneself completely—and one where viewers often find themselves equally absorbed.</p>
+    </section>
+
+    <section id="buy" class="section">
+      <h2>Acquire a Work</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Pricing</h3>
+          <p class="small">Affordable originals. Typical ranges:</p>
+          <ul class="small" style="margin:0;padding-left:18px;line-height:1.7">
+            <li>A6 / small studies: ₹ 1500 / £ 13 / $ 18</li>
+            <li>A5: ₹ 2800 / £ 24 / $ 32</li>
+            <li>A4: ₹ 4000 / £ 34 / $ 46</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Shipping</h3>
+          <p class="small">Ships flat, protected, worldwide. Delivery times vary by destination. Tracking provided. Buyers cover duties/taxes where applicable.</p>
+        </div>
+        <div class="card">
+          <h3>Commissions</h3>
+          <p class="small">I work intuitively; I don’t reproduce previous works. If a commission aligns with this approach, we can discuss scale, vibe, and theme.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contact</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Enquiries</h3>
+          <p class="small">Email: <a href="mailto:danieljasper209@gmail.com">danieljasper209@gmail.com</a><br> Instagram: <a href="https://instagram.com/jasart78" target="_blank" rel="noopener">@jasart78</a></p>
+        </div>
+        <div class="card">
+          <h3>Purchase</h3>
+          <p class="small">Send the title(s) you’re interested in, your city/country, and preferred shipping option. I’ll reply with availability and a quote.</p>
+        </div>
+        <div class="card">
+          <h3>Newsletter</h3>
+          <p class="small">Get a quiet note when new works drop. (Connect your email tool here.)</p>
+        </div>
+ 
+    </section>
+
+    <footer>
+      <div class="container" style="padding:0">
+        © <span id="y"></span> Jasper Daniel. All works are original. No reproductions.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-hidden="true">
+  <button class="close" id="lbClose" aria-label="Close (Esc)">× Close</button>
+
+  <!-- Navigation arrows -->
+  <button class="nav prev" id="lbPrev" aria-label="Previous image">‹</button>
+  <button class="nav next" id="lbNext" aria-label="Next image">›</button>
+
+  <figure>
+    <img id="lbImg" alt="" />
+    <figcaption class="caption" id="lbCap"></figcaption>
+  </figure>
+</div>
+
+
+ <script>
+  document.getElementById('y').textContent=new Date().getFullYear();
+
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCap = document.getElementById('lbCap');
+  const lbClose = document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+
+  const figures = Array.from(document.querySelectorAll('.gallery .art'));
+  let currentIndex = -1;
+
+  function showImage(index){
+    const fig = figures[index];
+    const img = fig.querySelector('img');
+    const cap = fig.querySelector('.cap')?.textContent || '';
+    lbImg.src = img.currentSrc || img.getAttribute('src');
+    lbImg.alt = img.alt || '';
+    lbCap.textContent = cap;
+    currentIndex = index;
+  }
+
+  function openLightbox(index){
+    showImage(index);
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeLightbox(){
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    lbImg.removeAttribute('src');
+    currentIndex = -1;
+  }
+
+  // navigation
+  function prevImage(){
+    if(currentIndex > 0){
+      showImage(currentIndex - 1);
+    } else {
+      showImage(figures.length - 1); // loop to last
+    }
+  }
+  function nextImage(){
+    if(currentIndex < figures.length - 1){
+      showImage(currentIndex + 1);
+    } else {
+      showImage(0); // loop back to first
+    }
+  }
+
+  // Event listeners
+  lbClose.addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', prevImage);
+  lbNext.addEventListener('click', nextImage);
+
+  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='Escape') closeLightbox();
+    if(e.key==='ArrowLeft') prevImage();
+    if(e.key==='ArrowRight') nextImage();
+  });
+
+  figures.forEach((fig,idx)=>{
+    fig.addEventListener('click', ()=> openLightbox(idx));
+  });
+</script>
+
+</body>
+</html>
