@@ -48,12 +48,15 @@
     .section{padding:32px 0}
     .section h2{font-family:Spectral,serif;font-size:28px;margin:0 0 12px}
 
-    /* Gallery */
+    /* Gallery (thumbnails — no text overlays) */
     .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .art{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;aspect-ratio:1/1;cursor:zoom-in}
+    .art{
+      background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;
+      position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+      aspect-ratio:1/1;cursor:zoom-in
+    }
     .art img{max-width:70%;max-height:70%;object-fit:contain;transition:transform .25s ease}
-    .art .cap{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;font-size:12px;color:#444;
-      background:linear-gradient(180deg,rgba(255,255,255,0),rgba(255,255,255,.95));}
+
     .grid-note{margin-top:8px;color:var(--muted);font-size:12px}
 
     /* Cards (Acquire/Contact) */
@@ -64,44 +67,92 @@
 
     footer{border-top:1px solid var(--line);padding:24px 0;color:#555;font-size:14px}
 
-    /* Lightbox */
+    /* Lightbox shell */
     .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999}
     .lightbox.open{display:flex}
-    .lightbox figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:12px}
-    .lightbox img{max-width:100vw;max-height:100vh;width:auto;height:auto;object-fit:contain}
-    .lightbox .caption{color:#e5e7eb;font-size:14px;text-align:center;max-width:80ch}
-    .lightbox .close{position:fixed;top:16px;right:16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#fff;padding:8px 12px;border-radius:999px;font-size:14px;cursor:pointer}
+    .lightbox figure{
+      margin:0;display:flex;flex-direction:column;align-items:center;gap:12px;
+      max-height:100vh; padding:64px 16px 120px; /* leave space for footer */
+      box-sizing:border-box;
+    }
+    .lightbox img{
+      max-width:calc(100vw - 32px);
+      max-height:calc(100vh - 220px); /* leaves space for footer + controls */
+      width:auto;height:auto;object-fit:contain
+    }
+    .lightbox .close{
+      position:fixed;top:16px;right:16px;background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.25);color:#fff;padding:8px 12px;border-radius:999px;
+      font-size:14px;cursor:pointer
+    }
 
-    /* Responsive */
+    /* Lightbox navigation arrows */
+    .lightbox .nav {
+      position:fixed;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);
+      color:#fff;font-size:32px;line-height:1;padding:10px 16px;border-radius:50%;
+      cursor:pointer;z-index:10000;
+    }
+    .lightbox .nav:hover { background:rgba(255,255,255,0.3); }
+    .lightbox .prev { left:20px; }
+    .lightbox .next { right:20px; }
+
+    /* SOLD badge */
+    .sold-badge{
+      position:fixed;top:16px;left:16px;z-index:10001;
+      background:#ef4444;color:#fff;border:1px solid rgba(255,255,255,.4);
+      padding:6px 10px;border-radius:999px;font-weight:700;font-size:12px;letter-spacing:.5px;
+      box-shadow:0 6px 16px rgba(0,0,0,.25);display:none;
+    }
+
+    /* Caption footer (always visible) */
+    .lb-footer{
+      position:fixed;left:0;right:0;bottom:0;z-index:10002;
+      background:rgba(0,0,0,.7);backdrop-filter:blur(6px);
+      color:#f8fafc; padding:12px 16px; display:none;
+    }
+    .lb-footer .lb-caption{
+      margin:0 auto; max-width:90ch; font-size:14px; line-height:1.4;
+      max-height:24vh; overflow:auto; word-break:break-word;
+    }
+
+    /* Responsive tweaks */
     @media (max-width:900px){
       .hero{grid-template-columns:1fr}
-      .gallery{grid-template-columns:repeat(2,1fr)}
       .cards{grid-template-columns:1fr 1fr}
       .nav-links{display:none}
+      .lightbox img{max-height:calc(100vh - 240px)}
     }
     @media (max-width:560px){
-      .gallery{grid-template-columns:1fr}
       .cards{grid-template-columns:1fr}
+      .lightbox img{max-height:calc(100vh - 260px)}
+      .sold-badge{ top:12px; left:12px; font-size:11px; padding:5px 9px; }
+      .lb-footer .lb-caption{ font-size:15px; }
     }
-/* Lightbox navigation arrows */
-.lightbox .nav {
-  position:fixed;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(255,255,255,0.15);
-  border:1px solid rgba(255,255,255,0.3);
-  color:#fff;
-  font-size:32px;
-  line-height:1;
-  padding:10px 16px;
-  border-radius:50%;
-  cursor:pointer;
-  z-index:10000;
-}
-.lightbox .nav:hover { background:rgba(255,255,255,0.3); }
-.lightbox .prev { left:20px; }
-.lightbox .next { right:20px; }
 
+    /* --- Gallery pagination (20 per slide) --- */
+    .gctrls{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin:8px 0}
+    .gctrls .gprev,.gctrls .gnext{
+      appearance:none;border:1px solid var(--line);background:#fff;color:#111;
+      padding:6px 10px;border-radius:999px;cursor:pointer;font-size:18px;line-height:1
+    }
+    .gctrls .gprev:hover,.gctrls .gnext:hover{background:#f3f4f6}
+
+    /* Turn gallery into horizontal track */
+    .gallery{
+      display:flex; gap:0; overflow:hidden; scroll-snap-type:x mandatory;
+      border-radius:16px;
+    }
+    .gallery-slide{ flex:0 0 100%; scroll-snap-align:start; padding:0; }
+    .gallery-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:18px; padding:0; }
+
+    /* Responsive columns per slide (still 20 items per page) */
+    @media (max-width:900px){
+      .gallery-grid{ grid-template-columns:repeat(3,1fr); }
+    }
+    @media (max-width:560px){
+      .gallery-grid{ grid-template-columns:repeat(2,1fr); }
+    }
   </style>
 </head>
 <body>
@@ -141,42 +192,127 @@
 
     <section id="works" class="section">
       <h2>Gallery</h2>
+
+      <!-- Pagination controls -->
+      <div class="gctrls" aria-label="Gallery pagination controls">
+        <button class="gprev" aria-label="Previous set">‹</button>
+        <span class="gpage" aria-live="polite">1 / 1</span>
+        <button class="gnext" aria-label="Next set">›</button>
+      </div>
+
+      <!-- Track of slides (JS groups items into sets of 20). Use data-caption + optional data-sold -->
       <div class="gallery" aria-live="polite">
-        <figure class="art" data-theme="living">
-          <img src="images/Tenements-1.jpg" alt="Charcoal study of stacked tenements on a hill side" loading="lazy" />
-          <figcaption class="cap">Tenements-1 · Charcoal · 8x8 inches· Original</figcaption>
-        </figure>
-        <figure class="art" data-theme="Drawings">
-          <img src="images/Untangled(Nirvana).jpg" alt="Intuitive pencil drawing of my version of Nirvana" loading="lazy" />
-          <figcaption class="cap">Untangled (Nirvana)· Pencil· 8x8 inches · Original</figcaption>
-        </figure>
-        <figure class="art" data-theme="Dream">
-          <img src="images/Dream-1.png" alt="Intuitive Charcoal rendition of a dreeam" loading="lazy" />
-          <figcaption class="cap">Dream-1 · Charcoal· A5 · Original</figcaption>
-        </figure>
-        <figure class="art" data-theme="quirky">
-          <img src="images/Conversation.jpg" alt="Digital drawing of two friends" loading="lazy" />
-          <figcaption class="cap">Conversation· Digital· A5 · Original</figcaption>
+        <figure class="art" data-theme="living"
+                data-caption="Tenements-1 · Series: Tenements · Charcoal · 8x8 inches · Price: ₹1800 / $18 · Original"
+                data-sold="true">
+          <img src="images/Tenements-1.jpg" alt="Charcoal study of stacked tenements on a hillside" loading="lazy" />
         </figure>
 
-        <!-- placeholders for artworks 5–20 -->
-        <figure class="art" data-theme="Landscape"><img src="images/Village 1.png" alt="Oil Pastels sketch of a village" loading="lazy" /><figcaption class="cap">Village 1 · Oil Pastels· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Dream"><img src="images/Arrival.jpg" alt="Watercolor rendition of an arrival" loading="lazy" /><figcaption class="cap">Arrival · Watercolor· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Digital"><img src="images/Village Girl.png" alt="Intuitive digital sketch of a village girl" loading="lazy" /><figcaption class="cap">Village Girl · Digital · A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Humour"><img src="images/Childhood Terror.jpg" alt="Intuitive Digital Drawing of childhood terror" loading="lazy" /><figcaption class="cap">Childhood Terror· Digital· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Dream"><img src="images/Transit.jpg" alt="Intuitive charcoal rendition of a dream" loading="lazy" /><figcaption class="cap">Transit· Charcoal· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Dream"><img src="images/Sunday.jpg" alt="Intuitive watercolor rendition of a street basking on the Sunday joy" loading="lazy" /><figcaption class="cap">Sunday· Watercolor· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Tenements"><img src="images/Street Chaos.jpg" alt="Intuitive abstract watercolor rendering of street" loading="lazy" /><figcaption class="cap">Street Chaos· Watercolor· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Tenements"><img src="images/Two Houses.jpg" alt="Oil Pastels finger paining of a village scene" loading="lazy" /><figcaption class="cap">Two Houses· Oil Pastels· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Dream"><img src="images/Face 5.jpg" alt="Intuitive charcoal rendition of a dream" loading="lazy" /><figcaption class="cap">Face 5· Charcoal· 8x8 inches· Original</figcaption></figure>
-        <figure class="art" data-theme="Dream"><img src="images/Face 4.png" alt="Intuitive rendition of a face in charcoal" loading="lazy" /><figcaption class="cap">Face 4· Charcoal· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Dream"><img src="images/Pub 1.jpg" alt="Intuitive rendition of a pub in charcoal" loading="lazy" /><figcaption class="cap">Pub 1· Charcoal· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Humour"><img src="images/Face 9.jpg" alt="Quick Sketch in oil pastels of a quirky face" loading="lazy" /><figcaption class="cap">Face 9· Oil Pastels· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Humour"><img src="images/Spider.png" alt="Intuitive Pencil Drawing of a moment" loading="lazy" /><figcaption class="cap">Spider· Pencil· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Drawing"><img src="images/Dancer.jpg" alt="Quick digital drawing of a dancer" loading="lazy" /><figcaption class="cap">Dancer· Digital· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Humour"><img src="images/Job's Friends.jpg" alt="Quick digital sketch of Job's Friends" loading="lazy" /><figcaption class="cap">Job's Friends· Digital· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Humour"><img src="images/Aunt.png" alt="Digital rendition of my aunt" loading="lazy" /><figcaption class="cap">Aunt· Digital· A5 · Original</figcaption></figure>
-        <figure class="art" data-theme="Humour"><img src="images/A Friend.jpg" alt="Water color sketch of a friend" loading="lazy" /><figcaption class="cap">A Friend· Watercolor· A5 · Original</figcaption></figure>
+        <figure class="art" data-theme="Drawings"
+                data-caption="Untangled (Nirvana) · Series: Drawings · Pencil · 8x8 inches · Price: ₹1800 / $18 · Original">
+          <img src="images/Untangled(Nirvana).jpg" alt="Intuitive pencil drawing of my version of Nirvana" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Dream-1 · Series: Dream · Charcoal · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Dream-1.png" alt="Intuitive charcoal rendition of a dream" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="quirky"
+                data-caption="Conversation · Series: Joy · Digital · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Conversation.jpg" alt="Digital drawing of two friends" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Landscape"
+                data-caption="Village 1 · Series: Landscape · Oil Pastels · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Village 1.png" alt="Oil pastels sketch of a village" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Arrival · Series: Dream · Watercolor · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Arrival.jpg" alt="Watercolor rendition of an arrival" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Digital"
+                data-caption="Village Girl · Series: Drawing · Digital · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Village Girl.png" alt="Intuitive digital sketch of a village girl" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="Childhood Terror · Series: Humour · Digital · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Childhood Terror.jpg" alt="Intuitive digital drawing of childhood terror" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Transit · Series: Dream · Charcoal · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Transit.jpg" alt="Intuitive charcoal rendition of a dream" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Sunday · Series: Dream · Watercolor · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Sunday.jpg" alt="Intuitive watercolor rendition of a street basking in Sunday joy" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Tenements"
+                data-caption="Street Chaos · Series: Tenements · Watercolor · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Street Chaos.jpg" alt="Intuitive abstract watercolor rendering of a street" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Tenements"
+                data-caption="Two Houses · Series: Tenements · Oil Pastels · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Two Houses.jpg" alt="Oil pastels finger painting of a village scene" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Face 5 · Series: Dream · Charcoal · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Face 5.jpg" alt="Intuitive charcoal rendition of a dream" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Face 4 · Series: Dream · Charcoal · A5 · Price: ₹2800 / $32 · Original" data-sold="true">
+          <img src="images/Face 4.png" alt="Intuitive rendition of a face in charcoal" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Dream"
+                data-caption="Pub 1 · Series: Dream · Charcoal · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Pub 1.jpg" alt="Intuitive rendition of a pub in charcoal" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="Face 9 · Series: Humour · Oil Pastels · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Face 9.jpg" alt="Quick sketch in oil pastels of a quirky face" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="Spider · Series: Humour · Pencil & Pen · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Spider.png" alt="Intuitive pencil drawing of a moment" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Drawing"
+                data-caption="Dancer · Series: Drawing · Digital · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Dancer.jpg" alt="Quick digital drawing of a dancer" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="Job's Friends · Series: Humour · Digital · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Job's Friends.jpg" alt="Quick digital sketch of Job's friends" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="Aunt · Series: Humour · Digital · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/Aunt.png" alt="Digital rendition of my aunt" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="A Friend · Series: People · Watercolor · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/A Friend.jpg" alt="Watercolor sketch of a friend" loading="lazy" />
+        </figure>
+
+        <figure class="art" data-theme="Humour"
+                data-caption="A Friend · Series: People · Watercolor · A5 · Price: ₹2800 / $32 · Original">
+          <img src="images/A Friend.jpg" alt="Watercolor sketch of a friend" loading="lazy" />
+        </figure>
+
       </div>
       <p class="grid-note">Stay in touch to receive notifications when I add new work. To view more, visit my instagram page. The link is in the contact section.</p>
     </section>
@@ -225,7 +361,7 @@
           <h3>Newsletter</h3>
           <p class="small">Get a quiet note when new works drop. (Connect your email tool here.)</p>
         </div>
- 
+      </div>
     </section>
 
     <footer>
@@ -237,90 +373,214 @@
 
   <!-- Lightbox overlay -->
   <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-hidden="true">
-  <button class="close" id="lbClose" aria-label="Close (Esc)">× Close</button>
+    <button class="close" id="lbClose" aria-label="Close (Esc)">× Close</button>
 
-  <!-- Navigation arrows -->
-  <button class="nav prev" id="lbPrev" aria-label="Previous image">‹</button>
-  <button class="nav next" id="lbNext" aria-label="Next image">›</button>
+    <!-- Navigation arrows -->
+    <button class="nav prev" id="lbPrev" aria-label="Previous image">‹</button>
+    <button class="nav next" id="lbNext" aria-label="Next image">›</button>
 
-  <figure>
-    <img id="lbImg" alt="" />
-    <figcaption class="caption" id="lbCap"></figcaption>
-  </figure>
-</div>
+    <!-- SOLD badge -->
+    <div id="lbSold" class="sold-badge" aria-hidden="true">SOLD</div>
 
+    <figure>
+      <img id="lbImg" alt="" />
+    </figure>
 
- <script>
-  document.getElementById('y').textContent=new Date().getFullYear();
+    <!-- Fixed caption footer -->
+    <div class="lb-footer" id="lbFooter" aria-live="polite">
+      <p class="lb-caption" id="lbCapText"></p>
+    </div>
+  </div>
 
-  const lb = document.getElementById('lightbox');
-  const lbImg = document.getElementById('lbImg');
-  const lbCap = document.getElementById('lbCap');
-  const lbClose = document.getElementById('lbClose');
-  const lbPrev = document.getElementById('lbPrev');
-  const lbNext = document.getElementById('lbNext');
+  <script>
+    // Year
+    document.getElementById('y').textContent = new Date().getFullYear();
 
-  const figures = Array.from(document.querySelectorAll('.gallery .art'));
-  let currentIndex = -1;
+    // ---------- Build horizontal slides (20 items per slide) ----------
+    const GALLERY_SELECTOR = '.gallery';
+    const ITEMS_PER_SLIDE = 20;
 
-  function showImage(index){
-    const fig = figures[index];
-    const img = fig.querySelector('img');
-    const cap = fig.querySelector('.cap')?.textContent || '';
-    lbImg.src = img.currentSrc || img.getAttribute('src');
-    lbImg.alt = img.alt || '';
-    lbCap.textContent = cap;
-    currentIndex = index;
-  }
+    const galleryTrack = document.querySelector(GALLERY_SELECTOR);
+    const originalItems = Array.from(galleryTrack.querySelectorAll('.art'));
 
-  function openLightbox(index){
-    showImage(index);
-    lb.classList.add('open');
-    lb.setAttribute('aria-hidden','false');
-    document.body.style.overflow='hidden';
-  }
+    function buildSlides() {
+      if (galleryTrack.querySelector('.gallery-slide')) return;
+      const totalSlides = Math.ceil(originalItems.length / ITEMS_PER_SLIDE) || 1;
 
-  function closeLightbox(){
-    lb.classList.remove('open');
-    lb.setAttribute('aria-hidden','true');
-    document.body.style.overflow='';
-    lbImg.removeAttribute('src');
-    currentIndex = -1;
-  }
+      const slidesFrag = document.createDocumentFragment();
+      for (let s = 0; s < totalSlides; s++) {
+        const start = s * ITEMS_PER_SLIDE;
+        const end = start + ITEMS_PER_SLIDE;
+        const slide = document.createElement('div');
+        slide.className = 'gallery-slide';
+        const grid = document.createElement('div');
+        grid.className = 'gallery-grid';
 
-  // navigation
-  function prevImage(){
-    if(currentIndex > 0){
-      showImage(currentIndex - 1);
-    } else {
-      showImage(figures.length - 1); // loop to last
+        originalItems.slice(start, end).forEach(node => grid.appendChild(node));
+        slide.appendChild(grid);
+        slidesFrag.appendChild(slide);
+      }
+
+      galleryTrack.innerHTML = '';
+      galleryTrack.appendChild(slidesFrag);
     }
-  }
-  function nextImage(){
-    if(currentIndex < figures.length - 1){
-      showImage(currentIndex + 1);
-    } else {
-      showImage(0); // loop back to first
+
+    buildSlides();
+
+    // ---------- Pagination controls ----------
+    const gPrev = document.querySelector('.gprev');
+    const gNext = document.querySelector('.gnext');
+    const gPage = document.querySelector('.gpage');
+
+    const slides = Array.from(galleryTrack.querySelectorAll('.gallery-slide'));
+    let galleryIndex = 0;
+
+    function updatePageLabel() {
+      if (gPage) gPage.textContent = `${galleryIndex + 1} / ${slides.length}`;
     }
-  }
 
-  // Event listeners
-  lbClose.addEventListener('click', closeLightbox);
-  lbPrev.addEventListener('click', prevImage);
-  lbNext.addEventListener('click', nextImage);
+    function goToSlide(i, behavior = 'smooth') {
+      const max = slides.length || 1;
+      galleryIndex = ((i % max) + max) % max; // safe modulo
+      const targetLeft = galleryTrack.clientWidth * galleryIndex;
+      galleryTrack.scrollTo({ left: targetLeft, behavior });
+      updatePageLabel();
+    }
 
-  lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
-  document.addEventListener('keydown',(e)=>{
-    if(e.key==='Escape') closeLightbox();
-    if(e.key==='ArrowLeft') prevImage();
-    if(e.key==='ArrowRight') nextImage();
-  });
+    gPrev?.addEventListener('click', () => goToSlide(galleryIndex - 1));
+    gNext?.addEventListener('click', () => goToSlide(galleryIndex + 1));
 
-  figures.forEach((fig,idx)=>{
-    fig.addEventListener('click', ()=> openLightbox(idx));
-  });
-</script>
+    // Keep index in sync if user scrolls (e.g., touchpad)
+    let scrollTO;
+    galleryTrack.addEventListener('scroll', () => {
+      clearTimeout(scrollTO);
+      scrollTO = setTimeout(() => {
+        const idx = Math.round(galleryTrack.scrollLeft / galleryTrack.clientWidth);
+        if (idx !== galleryIndex) {
+          galleryIndex = Math.max(0, Math.min(idx, slides.length - 1));
+          updatePageLabel();
+        }
+      }, 80);
+    });
 
+    // Resize safety (keeps page aligned)
+    window.addEventListener('resize', () => goToSlide(galleryIndex, 'auto'));
+
+    // ---------- Lightbox ----------
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+    const lbSold = document.getElementById('lbSold');
+    const lbFooter = document.getElementById('lbFooter');
+    const lbCapText = document.getElementById('lbCapText');
+
+    function allFigures() {
+      return Array.from(document.querySelectorAll('.gallery .art'));
+    }
+
+    let currentIndex = -1;
+
+    function showImage(index){
+      const figures = allFigures();
+      const fig = figures[index];
+      if (!fig) return;
+      const img = fig.querySelector('img');
+
+      // Prefer data-caption; fall back to alt text if missing/empty
+      let cap = (fig.getAttribute('data-caption') || '').trim();
+      if (!cap) cap = (img.getAttribute('alt') || '').trim();
+
+      const isSold = (fig.getAttribute('data-sold') || '').toLowerCase() === 'true';
+
+      lbImg.src = img.currentSrc || img.getAttribute('src');
+      lbImg.alt = img.alt || '';
+
+      // Update caption footer
+      if (cap) {
+        lbCapText.textContent = cap;
+        lbFooter.style.display = 'block';
+      } else {
+        lbCapText.textContent = '';
+        lbFooter.style.display = 'none';
+      }
+
+      // SOLD badge toggle
+      if (isSold) {
+        lbSold.style.display = 'inline-flex';
+        lbSold.setAttribute('aria-hidden', 'false');
+      } else {
+        lbSold.style.display = 'none';
+        lbSold.setAttribute('aria-hidden', 'true');
+      }
+
+      currentIndex = index;
+    }
+
+    function openLightbox(index){
+      showImage(index);
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden','false');
+      document.body.style.overflow='hidden';
+    }
+
+    function closeLightbox(){
+      lb.classList.remove('open');
+      lb.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+      lbImg.removeAttribute('src');
+      lbFooter.style.display = 'none';
+      currentIndex = -1;
+    }
+
+    function prevImage(){
+      const figures = allFigures();
+      if(figures.length === 0) return;
+      if(currentIndex > 0){
+        showImage(currentIndex - 1);
+      } else {
+        showImage(figures.length - 1);
+      }
+    }
+    function nextImage(){
+      const figures = allFigures();
+      if(figures.length === 0) return;
+      if(currentIndex < figures.length - 1){
+        showImage(currentIndex + 1);
+      } else {
+        showImage(0);
+      }
+    }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', prevImage);
+    lbNext.addEventListener('click', nextImage);
+
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLightbox(); });
+    document.addEventListener('keydown',(e)=>{
+      if(e.key==='Escape') closeLightbox();
+      if(lb.classList.contains('open')){
+        if(e.key==='ArrowLeft') prevImage();
+        if(e.key==='ArrowRight') nextImage();
+      } else {
+        if(e.key==='ArrowLeft') goToSlide(galleryIndex - 1);
+        if(e.key==='ArrowRight') goToSlide(galleryIndex + 1);
+      }
+    });
+
+    // Delegated click → open lightbox
+    document.addEventListener('click', (e) => {
+      const fig = e.target.closest('.art');
+      if (!fig || !fig.closest('.gallery')) return;
+      const figures = allFigures();
+      const idx = figures.indexOf(fig);
+      if (idx >= 0) openLightbox(idx);
+    });
+
+    // Initialize pager
+    updatePageLabel();
+    goToSlide(0, 'auto');
+  </script>
 </body>
-
 </html>
