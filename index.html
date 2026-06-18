@@ -146,9 +146,7 @@
 
     .lightbox-details {
       border-top: 1px solid #e5e5e5;
-      border-bottom: 1px solid #e5e5e5;
-      padding: 24px 0;
-      margin-bottom: 28px;
+      padding: 24px 0 0;
     }
 
     .lightbox-details h3 {
@@ -173,23 +171,6 @@
       font-size: 12px;
       letter-spacing: .08em;
       font-weight: 700;
-    }
-
-    .context-heading {
-      font-size: 14px;
-      color: #666;
-      margin: 0 0 14px;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-
-    .lightbox-context {
-      width: 100%;
-      max-height: 82vh;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto;
-      background: #fff;
     }
 
     .close {
@@ -265,6 +246,7 @@
 
       <section id="works">
         <h2>Selected Works</h2>
+
         <div class="grid" id="works-grid"></div>
       </section>
 
@@ -304,9 +286,6 @@
         <p class="detail-line" id="lightbox-frame-size"></p>
         <div id="lightbox-sold"></div>
       </div>
-
-      <p class="context-heading">View in Context</p>
-      <img class="lightbox-context" id="lightbox-context" src="" alt="">
     </div>
   </div>
 
@@ -315,221 +294,204 @@
 
     const artworks = [
       {
-        id: "jasper-01",
-        title: "Emergence (Emergence Series)",
-        medium: "Acrylic on Paper",
-        size: "16.5 x 23.4 inches",
-        year: "2026",
-        sold: false,
-        framed: "Framed",
-        frameSize: "",
-        thumb: "images/jasper-01-thumb.jpg",
-        full: "images/jasper-01-full.jpg",
-        context: "images/jasper-01-context.png"
+            "id": "jasper-01",
+            "title": "Emergence (Emergence Series)",
+            "medium": "Acrylic on Paper",
+            "size": "16.5 x 23.4 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": true,
+            "frameSize": "",
+            "thumb": "images/jasper-01-thumb.jpg",
+            "full": "images/jasper-01-full.jpg"
       },
       {
-        id: "jasper-02",
-        title: "An Illusion of Stability (Emergence Series)",
-        medium: "Acrylic on Paper",
-        size: "16.5 x 23.4 inches",
-        year: "2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-02-thumb.jpg",
-        full: "images/jasper-02-full.jpg",
-        context: "images/jasper-02-context.png"
+            "id": "jasper-02",
+            "title": "An Illusion of Stability (Emergence Series)",
+            "medium": "Acrylic on Paper",
+            "size": "16.5 x 23.4 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-02-thumb.jpg",
+            "full": "images/jasper-02-full.jpg"
       },
       {
-        id: "jasper-03",
-        title: "The Pursuit of Balance (Emergence Series)",
-        medium: "Acrylic on Paper",
-        size: "16.5 x 23.4 inches",
-        year: "2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-03-thumb.jpg",
-        full: "images/jasper-03-full.jpg",
-        context: "images/jasper-03-context.png"
+            "id": "jasper-03",
+            "title": "The Pursuit of Balance (Emergence Series)",
+            "medium": "Acrylic on Paper",
+            "size": "16.5 x 23.4 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-03-thumb.jpg",
+            "full": "images/jasper-03-full.jpg"
       },
       {
-        id: "jasper-04",
-        title: "Priestess (What Remains Series)",
-        medium: "Ink on Paper",
-        size: "7.7 x 5.3 inches",
-        year: "2025",
-        sold: false,
-        framed: "Framed",
-        frameSize: "12.5 x 14.7 inches",
-        thumb: "images/jasper-04-thumb.jpg",
-        full: "images/jasper-04-full.jpg",
-        context: "images/jasper-04-context.png"
+            "id": "jasper-04",
+            "title": "Priestess (What Remains Series)",
+            "medium": "Ink on Paper",
+            "size": "7.7 x 5.3 inches",
+            "year": "2025",
+            "sold": false,
+            "framed": true,
+            "frameSize": "12.5 x 14.7 inches",
+            "thumb": "images/jasper-04-thumb.jpg",
+            "full": "images/jasper-04-full.jpg"
       },
       {
-        id: "jasper-05",
-        title: "Prophet (What Remains Series)",
-        medium: "Ink on Paper",
-        size: "5.3 x 7.7 inches",
-        year: "2025",
-        sold: false,
-        framed: "Framed",
-        frameSize: "12.5 x 14.7 inches",
-        thumb: "images/jasper-05-thumb.jpg",
-        full: "images/jasper-05-full.jpg",
-        context: "images/jasper-05-context.png"
+            "id": "jasper-05",
+            "title": "Prophet (What Remains Series)",
+            "medium": "Ink on Paper",
+            "size": "5.3 x 7.7 inches",
+            "year": "2025",
+            "sold": false,
+            "framed": true,
+            "frameSize": "12.5 x 14.7 inches",
+            "thumb": "images/jasper-05-thumb.jpg",
+            "full": "images/jasper-05-full.jpg"
       },
       {
-        id: "jasper-06",
-        title: "Structures in the Dark 1",
-        medium: "Ink on Paper",
-        size: "11.5 x 8.5 cms",
-        year: "",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-06-thumb.jpg",
-        full: "images/jasper-06-full.jpg",
-        context: "images/jasper-06-context.png"
+            "id": "jasper-06",
+            "title": "Structures in the Dark 1",
+            "medium": "Ink on Paper",
+            "size": "11.5 x 8.5 cms",
+            "year": "",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-06-thumb.jpg",
+            "full": "images/jasper-06-full.jpg"
       },
       {
-        id: "jasper-07",
-        title: "Structures in the Dark 2",
-        medium: "Ink on Paper",
-        size: "11.5 x 8.5 cms",
-        year: "",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-07-thumb.jpg",
-        full: "images/jasper-07-full.jpg",
-        context: "images/jasper-07-context.png"
+            "id": "jasper-07",
+            "title": "Structures in the Dark 2",
+            "medium": "Ink on Paper",
+            "size": "11.5 x 8.5 cms",
+            "year": "",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-07-thumb.jpg",
+            "full": "images/jasper-07-full.jpg"
       },
       {
-        id: "jasper-08",
-        title: "The Energy of A City",
-        medium: "Acrylic on Paper",
-        size: "8.2X 11.6 inches",
-        year: "2025",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-08-thumb.jpg",
-        full: "images/jasper-08-full.jpg",
-        context: "images/jasper-08-context.png"
+            "id": "jasper-08",
+            "title": "The Energy of A City",
+            "medium": "Acrylic on Paper",
+            "size": "8.2X 11.6 inches",
+            "year": "2025",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-08-thumb.jpg",
+            "full": "images/jasper-08-full.jpg"
       },
       {
-        id: "jasper-09",
-        title: "A Queen's Court",
-        medium: "Acrylic on Paper",
-        size: "8.2X 11.6 inches",
-        year: "2025",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-09-thumb.jpg",
-        full: "images/jasper-09-full.jpg",
-        context: "images/jasper-09-context.png"
+            "id": "jasper-09",
+            "title": "A Queen's Court",
+            "medium": "Acrylic on Paper",
+            "size": "8.2X 11.6 inches",
+            "year": "2025",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-09-thumb.jpg",
+            "full": "images/jasper-09-full.jpg"
       },
       {
-        id: "jasper-10",
-        title: "The Ghost of A City",
-        medium: "Acrylic on Paper",
-        size: "8.2X 11.6 inches",
-        year: "2025",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-10-thumb.jpg",
-        full: "images/jasper-10-full.jpg",
-        context: "images/jasper-10-context.png"
+            "id": "jasper-10",
+            "title": "The Ghost of A City",
+            "medium": "Acrylic on Paper",
+            "size": "8.2X 11.6 inches",
+            "year": "2025",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-10-thumb.jpg",
+            "full": "images/jasper-10-full.jpg"
       },
       {
-        id: "jasper-11",
-        title: "Trio",
-        medium: "Ink&Watercolor on Paper",
-        size: "7.7 x 5.3 inches",
-        year: "2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-11-thumb.jpg",
-        full: "images/jasper-11-full.jpg",
-        context: "images/jasper-11-context.png"
+            "id": "jasper-11",
+            "title": "Trio",
+            "medium": "Ink&Watercolor on Paper",
+            "size": "7.7 x 5.3 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-11-thumb.jpg",
+            "full": "images/jasper-11-full.jpg"
       },
       {
-        id: "jasper-12",
-        title: "Returning Home",
-        medium: "Acrylic on Paper",
-        size: "16.5 x 23.4 inches",
-        year: "2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-12-thumb.jpg",
-        full: "images/jasper-12-full.jpg",
-        context: "images/jasper-12-context.png"
+            "id": "jasper-12",
+            "title": "Returning Home",
+            "medium": "Acrylic on Paper",
+            "size": "16.5 x 23.4 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-12-thumb.jpg",
+            "full": "images/jasper-12-full.jpg"
       },
       {
-        id: "jasper-13",
-        title: "Shambles",
-        medium: "Mixed Media on paper",
-        size: "16.5 x 23.4 inches",
-        year: "2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-13-thumb.jpg",
-        full: "images/jasper-13-full.jpg",
-        context: "images/jasper-13-context.png"
+            "id": "jasper-13",
+            "title": "Shambles",
+            "medium": "Mixed Media on paper",
+            "size": "16.5 x 23.4 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-13-thumb.jpg",
+            "full": "images/jasper-13-full.jpg"
       },
       {
-        id: "jasper-14",
-        title: "The Marriage",
-        medium: "Mixed media on canvas board",
-        size: "2 x 3 feet",
-        year: "June 2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-14-thumb.jpg",
-        full: "images/jasper-14-full.jpg",
-        context: "images/jasper-14-context.png"
+            "id": "jasper-14",
+            "title": "The Marriage",
+            "medium": "Mixed media on canvas board",
+            "size": "2 x 3 feet",
+            "year": "June 2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-14-thumb.jpg",
+            "full": "images/jasper-14-full.jpg"
       },
       {
-        id: "jasper-15",
-        title: "Arrival",
-        medium: "Watercolor",
-        size: "7.7 x 5.3 inches",
-        year: "2024",
-        sold: true,
-        framed: "Framed",
-        frameSize: "",
-        thumb: "images/jasper-15-thumb.jpg",
-        full: "images/jasper-15-full.jpg",
-        context: "images/jasper-15-context.png"
+            "id": "jasper-15",
+            "title": "Arrival",
+            "medium": "Watercolor",
+            "size": "7.7 x 5.3 inches",
+            "year": "2024",
+            "sold": true,
+            "framed": true,
+            "frameSize": "",
+            "thumb": "images/jasper-15-thumb.jpg",
+            "full": "images/jasper-15-full.jpg"
       },
       {
-        id: "jasper-16",
-        title: "Fragmented Head",
-        medium: "Mixed Media on Paper",
-        size: "23.4 x 16.5 inches",
-        year: "2026",
-        sold: false,
-        framed: "",
-        frameSize: "",
-        thumb: "images/jasper-16-thumb.jpg",
-        full: "images/jasper-16-full.jpg",
-        context: "images/jasper-16-context.png"
+            "id": "jasper-16",
+            "title": "Fragmented Head",
+            "medium": "Mixed Media on Paper",
+            "size": "23.4 x 16.5 inches",
+            "year": "2026",
+            "sold": false,
+            "framed": false,
+            "frameSize": "",
+            "thumb": "images/jasper-16-thumb.jpg",
+            "full": "images/jasper-16-full.jpg"
       }
-    ];
+];
 
     const worksGrid = document.getElementById("works-grid");
     const lightbox = document.getElementById("lightbox");
     const closeBtn = document.getElementById("close");
 
     const lightboxFull = document.getElementById("lightbox-full");
-    const lightboxContext = document.getElementById("lightbox-context");
     const lightboxTitle = document.getElementById("lightbox-title");
     const lightboxMedium = document.getElementById("lightbox-medium");
     const lightboxSize = document.getElementById("lightbox-size");
@@ -562,14 +524,11 @@
       lightboxFull.src = artwork.full;
       lightboxFull.alt = artwork.title;
 
-      lightboxContext.src = artwork.context;
-      lightboxContext.alt = artwork.title + " in interior setting";
-
       lightboxTitle.textContent = artwork.title;
       lightboxMedium.textContent = artwork.medium || "";
       lightboxSize.textContent = artwork.size ? "Size: " + artwork.size : "";
       lightboxYear.textContent = artwork.year ? "Year: " + artwork.year : "";
-      lightboxFramed.textContent = artwork.framed || "";
+      lightboxFramed.textContent = artwork.framed ? "Framed" : "";
       lightboxFrameSize.textContent = artwork.frameSize ? "Size with frame: " + artwork.frameSize : "";
 
       lightboxSold.innerHTML = artwork.sold ? '<span class="sold">SOLD</span>' : "";
@@ -580,10 +539,7 @@
 
     function closeLightbox() {
       lightbox.classList.remove("open");
-
       lightboxFull.src = "";
-      lightboxContext.src = "";
-
       document.body.style.overflow = "";
     }
 
