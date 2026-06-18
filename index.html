@@ -119,19 +119,77 @@
       inset: 0;
       background: rgba(0,0,0,.92);
       z-index: 999;
-      align-items: center;
-      justify-content: center;
+      overflow-y: auto;
       padding: 24px;
     }
 
     .lightbox.open {
-      display: flex;
+      display: block;
     }
 
-    .lightbox img {
-      max-width: 92vw;
-      max-height: 88vh;
+    .lightbox-inner {
+      max-width: 980px;
+      margin: 56px auto 40px;
+      background: #fff;
+      color: #111;
+      padding: 28px;
+    }
+
+    .lightbox-full {
+      width: 100%;
+      max-height: 82vh;
       object-fit: contain;
+      display: block;
+      margin: 0 auto 28px;
+      background: #fff;
+    }
+
+    .lightbox-details {
+      border-top: 1px solid #e5e5e5;
+      border-bottom: 1px solid #e5e5e5;
+      padding: 24px 0;
+      margin-bottom: 28px;
+    }
+
+    .lightbox-details h3 {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      line-height: 1.15;
+      font-weight: 400;
+      margin: 0 0 16px;
+    }
+
+    .detail-line {
+      margin: 6px 0;
+      font-size: 15px;
+      color: #444;
+    }
+
+    .sold {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 10px;
+      border: 1px solid #111;
+      font-size: 12px;
+      letter-spacing: .08em;
+      font-weight: 700;
+    }
+
+    .context-heading {
+      font-size: 14px;
+      color: #666;
+      margin: 0 0 14px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .lightbox-context {
+      width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+      background: #fff;
     }
 
     .close {
@@ -144,6 +202,7 @@
       border-radius: 20px;
       cursor: pointer;
       font-size: 14px;
+      z-index: 1000;
     }
 
     @media (max-width: 850px) {
@@ -153,6 +212,14 @@
 
       .grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .lightbox-inner {
+        padding: 20px;
+      }
+
+      .lightbox-details h3 {
+        font-size: 26px;
       }
     }
 
@@ -167,6 +234,15 @@
 
       .grid {
         grid-template-columns: 1fr;
+      }
+
+      .lightbox {
+        padding: 14px;
+      }
+
+      .lightbox-inner {
+        margin-top: 54px;
+        padding: 16px;
       }
     }
   </style>
@@ -189,25 +265,7 @@
 
       <section id="works">
         <h2>Selected Works</h2>
-
-        <div class="grid">
-          <figure class="work"><img src="images/jasper-01.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-02.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-03.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-04.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-05.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-06.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-07.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-08.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-09.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-10.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-11.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-12.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-13.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-14.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-15.jpg" alt="Selected work by Jasper Daniel"></figure>
-          <figure class="work"><img src="images/jasper-16.jpg" alt="Selected work by Jasper Daniel"></figure>
-        </div>
+        <div class="grid" id="works-grid"></div>
       </section>
 
       <section id="about">
@@ -233,39 +291,313 @@
 
   <div class="lightbox" id="lightbox">
     <button class="close" id="close">Close</button>
-    <img id="lightbox-img" src="" alt="">
+
+    <div class="lightbox-inner">
+      <img class="lightbox-full" id="lightbox-full" src="" alt="">
+
+      <div class="lightbox-details">
+        <h3 id="lightbox-title"></h3>
+        <p class="detail-line" id="lightbox-medium"></p>
+        <p class="detail-line" id="lightbox-size"></p>
+        <p class="detail-line" id="lightbox-year"></p>
+        <p class="detail-line" id="lightbox-framed"></p>
+        <p class="detail-line" id="lightbox-frame-size"></p>
+        <div id="lightbox-sold"></div>
+      </div>
+
+      <p class="context-heading">View in Context</p>
+      <img class="lightbox-context" id="lightbox-context" src="" alt="">
+    </div>
   </div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
+    const artworks = [
+      {
+        id: "jasper-01",
+        title: "Emergence (Emergence Series)",
+        medium: "Acrylic on Paper",
+        size: "16.5 x 23.4 inches",
+        year: "2026",
+        sold: false,
+        framed: "Framed",
+        frameSize: "",
+        thumb: "images/jasper-01-thumb.jpg",
+        full: "images/jasper-01-full.jpg",
+        context: "images/jasper-01-context.png"
+      },
+      {
+        id: "jasper-02",
+        title: "An Illusion of Stability (Emergence Series)",
+        medium: "Acrylic on Paper",
+        size: "16.5 x 23.4 inches",
+        year: "2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-02-thumb.jpg",
+        full: "images/jasper-02-full.jpg",
+        context: "images/jasper-02-context.png"
+      },
+      {
+        id: "jasper-03",
+        title: "The Pursuit of Balance (Emergence Series)",
+        medium: "Acrylic on Paper",
+        size: "16.5 x 23.4 inches",
+        year: "2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-03-thumb.jpg",
+        full: "images/jasper-03-full.jpg",
+        context: "images/jasper-03-context.png"
+      },
+      {
+        id: "jasper-04",
+        title: "Priestess (What Remains Series)",
+        medium: "Ink on Paper",
+        size: "7.7 x 5.3 inches",
+        year: "2025",
+        sold: false,
+        framed: "Framed",
+        frameSize: "12.5 x 14.7 inches",
+        thumb: "images/jasper-04-thumb.jpg",
+        full: "images/jasper-04-full.jpg",
+        context: "images/jasper-04-context.png"
+      },
+      {
+        id: "jasper-05",
+        title: "Prophet (What Remains Series)",
+        medium: "Ink on Paper",
+        size: "5.3 x 7.7 inches",
+        year: "2025",
+        sold: false,
+        framed: "Framed",
+        frameSize: "12.5 x 14.7 inches",
+        thumb: "images/jasper-05-thumb.jpg",
+        full: "images/jasper-05-full.jpg",
+        context: "images/jasper-05-context.png"
+      },
+      {
+        id: "jasper-06",
+        title: "Structures in the Dark 1",
+        medium: "Ink on Paper",
+        size: "11.5 x 8.5 cms",
+        year: "",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-06-thumb.jpg",
+        full: "images/jasper-06-full.jpg",
+        context: "images/jasper-06-context.png"
+      },
+      {
+        id: "jasper-07",
+        title: "Structures in the Dark 2",
+        medium: "Ink on Paper",
+        size: "11.5 x 8.5 cms",
+        year: "",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-07-thumb.jpg",
+        full: "images/jasper-07-full.jpg",
+        context: "images/jasper-07-context.png"
+      },
+      {
+        id: "jasper-08",
+        title: "The Energy of A City",
+        medium: "Acrylic on Paper",
+        size: "8.2X 11.6 inches",
+        year: "2025",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-08-thumb.jpg",
+        full: "images/jasper-08-full.jpg",
+        context: "images/jasper-08-context.png"
+      },
+      {
+        id: "jasper-09",
+        title: "A Queen's Court",
+        medium: "Acrylic on Paper",
+        size: "8.2X 11.6 inches",
+        year: "2025",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-09-thumb.jpg",
+        full: "images/jasper-09-full.jpg",
+        context: "images/jasper-09-context.png"
+      },
+      {
+        id: "jasper-10",
+        title: "The Ghost of A City",
+        medium: "Acrylic on Paper",
+        size: "8.2X 11.6 inches",
+        year: "2025",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-10-thumb.jpg",
+        full: "images/jasper-10-full.jpg",
+        context: "images/jasper-10-context.png"
+      },
+      {
+        id: "jasper-11",
+        title: "Trio",
+        medium: "Ink&Watercolor on Paper",
+        size: "7.7 x 5.3 inches",
+        year: "2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-11-thumb.jpg",
+        full: "images/jasper-11-full.jpg",
+        context: "images/jasper-11-context.png"
+      },
+      {
+        id: "jasper-12",
+        title: "Returning Home",
+        medium: "Acrylic on Paper",
+        size: "16.5 x 23.4 inches",
+        year: "2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-12-thumb.jpg",
+        full: "images/jasper-12-full.jpg",
+        context: "images/jasper-12-context.png"
+      },
+      {
+        id: "jasper-13",
+        title: "Shambles",
+        medium: "Mixed Media on paper",
+        size: "16.5 x 23.4 inches",
+        year: "2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-13-thumb.jpg",
+        full: "images/jasper-13-full.jpg",
+        context: "images/jasper-13-context.png"
+      },
+      {
+        id: "jasper-14",
+        title: "The Marriage",
+        medium: "Mixed media on canvas board",
+        size: "2 x 3 feet",
+        year: "June 2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-14-thumb.jpg",
+        full: "images/jasper-14-full.jpg",
+        context: "images/jasper-14-context.png"
+      },
+      {
+        id: "jasper-15",
+        title: "Arrival",
+        medium: "Watercolor",
+        size: "7.7 x 5.3 inches",
+        year: "2024",
+        sold: true,
+        framed: "Framed",
+        frameSize: "",
+        thumb: "images/jasper-15-thumb.jpg",
+        full: "images/jasper-15-full.jpg",
+        context: "images/jasper-15-context.png"
+      },
+      {
+        id: "jasper-16",
+        title: "Fragmented Head",
+        medium: "Mixed Media on Paper",
+        size: "23.4 x 16.5 inches",
+        year: "2026",
+        sold: false,
+        framed: "",
+        frameSize: "",
+        thumb: "images/jasper-16-thumb.jpg",
+        full: "images/jasper-16-full.jpg",
+        context: "images/jasper-16-context.png"
+      }
+    ];
+
+    const worksGrid = document.getElementById("works-grid");
     const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
     const closeBtn = document.getElementById("close");
 
-    document.querySelectorAll(".work img").forEach(img => {
-      img.addEventListener("click", () => {
-        lightboxImg.src = img.src;
-        lightbox.classList.add("open");
+    const lightboxFull = document.getElementById("lightbox-full");
+    const lightboxContext = document.getElementById("lightbox-context");
+    const lightboxTitle = document.getElementById("lightbox-title");
+    const lightboxMedium = document.getElementById("lightbox-medium");
+    const lightboxSize = document.getElementById("lightbox-size");
+    const lightboxYear = document.getElementById("lightbox-year");
+    const lightboxFramed = document.getElementById("lightbox-framed");
+    const lightboxFrameSize = document.getElementById("lightbox-frame-size");
+    const lightboxSold = document.getElementById("lightbox-sold");
+
+    artworks.forEach((artwork, index) => {
+      const figure = document.createElement("figure");
+      figure.className = "work";
+
+      const img = document.createElement("img");
+      img.src = artwork.thumb;
+      img.alt = artwork.title;
+      img.loading = "lazy";
+
+      figure.appendChild(img);
+
+      figure.addEventListener("click", () => {
+        openLightbox(index);
       });
+
+      worksGrid.appendChild(figure);
     });
 
-    closeBtn.addEventListener("click", () => {
+    function openLightbox(index) {
+      const artwork = artworks[index];
+
+      lightboxFull.src = artwork.full;
+      lightboxFull.alt = artwork.title;
+
+      lightboxContext.src = artwork.context;
+      lightboxContext.alt = artwork.title + " in interior setting";
+
+      lightboxTitle.textContent = artwork.title;
+      lightboxMedium.textContent = artwork.medium || "";
+      lightboxSize.textContent = artwork.size ? "Size: " + artwork.size : "";
+      lightboxYear.textContent = artwork.year ? "Year: " + artwork.year : "";
+      lightboxFramed.textContent = artwork.framed || "";
+      lightboxFrameSize.textContent = artwork.frameSize ? "Size with frame: " + artwork.frameSize : "";
+
+      lightboxSold.innerHTML = artwork.sold ? '<span class="sold">SOLD</span>' : "";
+
+      lightbox.classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
       lightbox.classList.remove("open");
-      lightboxImg.src = "";
-    });
+
+      lightboxFull.src = "";
+      lightboxContext.src = "";
+
+      document.body.style.overflow = "";
+    }
+
+    closeBtn.addEventListener("click", closeLightbox);
 
     lightbox.addEventListener("click", event => {
       if (event.target === lightbox) {
-        lightbox.classList.remove("open");
-        lightboxImg.src = "";
+        closeLightbox();
       }
     });
 
     document.addEventListener("keydown", event => {
       if (event.key === "Escape") {
-        lightbox.classList.remove("open");
-        lightboxImg.src = "";
+        closeLightbox();
       }
     });
   </script>
